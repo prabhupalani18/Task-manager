@@ -22,7 +22,7 @@ This is a task manager app developed using Node.js and MongoDB. It allows users 
 
 1. Clone the repository:
     ```sh
-   git clone https://github.com/your-username/task-manager-app.git
+   git clone https://github.com/prabhupalani18/Task-manager.git
     ```
 
 2. Install the dependencies:
