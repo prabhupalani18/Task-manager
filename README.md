@@ -69,7 +69,7 @@ To deploy the app on Render:
 
 4. Deploy the app and wait for the deployment to complete.
 
-5. Access your deployed app at the provided Render URL.
+5. Render will provide an URL that can be used to access your deployed application.
 
 ## Contributing
 
