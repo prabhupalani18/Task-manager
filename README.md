@@ -57,7 +57,7 @@ The app should now be running locally on `http://localhost:3000`.
 
 To deploy the app on Render:
 
-1. Sign up for a Render account at [https://render.com/](https://render.com/).
+1. Sign up for a Render account at `https://render.com/`.
 
 2. Create a new web service and connect your GitHub repository.
 
