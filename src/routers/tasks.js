@@ -8,7 +8,7 @@ router.post('/tasks', async (req,res)=>{
         await task.save()
         res.status(201).send()
     }catch(error){
-        res.status(400).send(error)
+        res.status(400).json({ error: error.message })
     }
 })
 
@@ -21,7 +21,7 @@ router.get('/tasks', async(req,res)=>{
         
         res.send(tasks)
     }catch(error){
-        res.status(500).send(error)
+        res.status(500).json({ error: error.message })
     }
 })
 
@@ -37,12 +37,11 @@ router.get('/tasks/:id', async (req,res)=>{
         res.send(task)
     }catch(error)
     {
-        res.status(500).send(error)
+        res.status(500).json({ error: error.message })
     }
 })
 
 router.patch('/tasks/:id', async(req,res)=>{
-    try{
         const allowedKeys = ["description", "completed"]
         const requestKeys = Object.keys(req.body)
         const allowUpdateFlag = requestKeys.every((key) => allowedKeys.includes(key))
@@ -50,15 +49,19 @@ router.patch('/tasks/:id', async(req,res)=>{
         {
             return res.status(400).send({"error": "invalid keys found"})
         }
-        const task = await Tasks.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
+        try{
+        let task = await Tasks.findById(req.params.id)
         if(!task)
         {
             return res.status(404).send()
         }
         
+        requestKeys.forEach((update)=> task[update] = req.body[update])
+        task = await task.save()
+        
         res.send(task)
     }catch(error){
-        res.status(500).send(error)
+        res.status(500).json({ error: error.message })
     }
 })
 
@@ -73,7 +76,7 @@ router.delete('/tasks/:id', async(req,res)=>{
         res.send(task)
     }catch(error)
     {
-        res.status(500).send(error)
+        res.status(500).json({ error: error.message })
     }
 })
 
