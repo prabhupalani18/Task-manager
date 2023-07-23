@@ -16,14 +16,10 @@ router.post('/tasks', auth, async (req,res)=>{
     }
 })
 
-router.get('/tasks/me', auth, async(req,res)=>{
+router.get('/tasks', auth, async(req,res)=>{
     try{
-        const tasks = await Tasks.find({owner: req.user._id})
-        if(!tasks){
-            return res.status(404).send()
-        }
-        
-        res.send(tasks)
+        await req.user.populate('tasks')
+        res.send(req.user.tasks)
     }catch(error){
         res.status(500).json({ error: error.message })
     }
@@ -45,7 +41,7 @@ router.get('/tasks/:id', auth, async (req,res)=>{
     }
 })
 
-router.patch('/tasks/:id', async(req,res)=>{
+router.patch('/tasks/:id', auth, async(req,res)=>{
         const allowedKeys = ["description", "completed"]
         const requestKeys = Object.keys(req.body)
         const allowUpdateFlag = requestKeys.every((key) => allowedKeys.includes(key))
@@ -54,14 +50,14 @@ router.patch('/tasks/:id', async(req,res)=>{
             return res.status(400).send({"error": "invalid keys found"})
         }
         try{
-        let task = await Tasks.findById(req.params.id)
+        const task = await Tasks.findOne({_id: req.params.id, owner: req.user._id})
         if(!task)
         {
             return res.status(404).send()
         }
         
         requestKeys.forEach((update)=> task[update] = req.body[update])
-        task = await task.save()
+        await task.save()
         
         res.send(task)
     }catch(error){
@@ -69,12 +65,12 @@ router.patch('/tasks/:id', async(req,res)=>{
     }
 })
 
-router.delete('/tasks/:id', async(req,res)=>{
+router.delete('/tasks/:id', auth, async(req,res)=>{
     try{
-        const task = await Tasks.findByIdAndDelete(req.params.id)
+        const task = await Tasks.findOneAndDelete({"_id": req.params.id, "owner": req.user._id})
         if(!task)
         {
-            return res.status(404).send()
+            return res.status(404).send("Task not found")
         }
 
         res.send(task)
