@@ -28,6 +28,19 @@ router.post('/users/login',async (req,res)=>{
     }
 })
 
+router.post('/users/logout', auth, async (req,res)=>{
+    try{
+        const user = req.user
+        user.tokens = user.tokens.filter((tokenObject)=> {
+            return tokenObject.token !== req.token
+        })
+        await user.save()
+        res.send("User logged out")
+    }catch(error){
+        res.status(500).send(error.message)
+    }
+})
+
 router.get('/users/me', auth, async(req,res)=>{
     res.send(req.user)
 })
