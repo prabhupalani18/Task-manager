@@ -9,8 +9,19 @@ const taskSchema = new mongoose.Schema({
     completed: {
         type: Boolean,
         default: false
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     }
 })
+
+taskSchema.methods.toJSON = function(){
+    const tasks = this
+    const tasksObject = tasks.toObject()
+    delete tasksObject.owner
+    return tasksObject
+}
 
 const Tasks = mongoose.model('Tasks', taskSchema)
 
