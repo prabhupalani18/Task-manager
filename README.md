@@ -64,8 +64,8 @@ To deploy the app on Render:
 3. Configure the environment variables under the "Environment" settings:
 
    - `PORT`: Set it to `3000` or any other desired port.
-   - `DATABASE_URL`: Set it to your MongoDB connection URL.
-   - `SESSION_SECRET`: Set it to a secure session secret.
+   - `SECRETKEY`: JWT sign secret.
+   - `TOKEN_EXPIRATION_DURATION`: JWT expiry duration
 
 4. Deploy the app and wait for the deployment to complete.
 
