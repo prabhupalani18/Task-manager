@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 require('dotenv').config()
 const expiresIn = process.env.TOKEN_EXPIRATION_DURATION
 const secretKey = process.env.SECRETKEY
+const Tasks = require("../models/tasks")
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -76,6 +77,7 @@ userSchema.methods.generateAuthToken = async function(){
     return token
 }
 
+//Authenticate user
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) {
@@ -96,6 +98,13 @@ userSchema.pre('save', async function(next){
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8)
     }
+    next()
+})
+
+//Delete tasks when user is deleted
+userSchema.pre('deleteOne', async function(next){
+    const user = this
+    await Tasks.deleteMany({owner: user._conditions._id })
     next()
 })
 
