@@ -21,6 +21,7 @@ router.get('/tasks', auth, async(req,res)=>{
     try{
         const match = {}
         const options = {}
+        options.sort = {}
         if(req.query.completed){
             match.completed = req.query.completed.toLowerCase() === 'true'
         }
@@ -31,6 +32,10 @@ router.get('/tasks', auth, async(req,res)=>{
         if(req.query.skip)
         {
             options.skip = parseInt(req.query.skip)
+        }
+        if(req.query.sortBy){
+            const parts = req.query.sortBy.split(":")
+            options.sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
         }
         await req.user.populate({
             path: 'tasks',
