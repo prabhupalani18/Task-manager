@@ -10,7 +10,7 @@ router.post('/tasks', auth, async (req,res)=>{
             owner: req.user._id
         })
         await task.save()
-        res.status(201).send()
+        res.status(201).send(task)
     }catch(error){
         res.status(400).json({ error: error.message })
     }
@@ -18,7 +18,14 @@ router.post('/tasks', auth, async (req,res)=>{
 
 router.get('/tasks', auth, async(req,res)=>{
     try{
-        await req.user.populate('tasks')
+        const match = {}
+        if(req.query.completed){
+            match.completed = req.query.completed.toLowerCase() === 'true'
+        }
+        await req.user.populate({
+            path: 'tasks',
+            match: match
+        })
         res.send(req.user.tasks)
     }catch(error){
         res.status(500).json({ error: error.message })
