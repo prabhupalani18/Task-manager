@@ -15,6 +15,8 @@ const taskSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     }
+},{
+    timestamps: true
 })
 
 taskSchema.methods.toJSON = function(){
