@@ -16,15 +16,26 @@ router.post('/tasks', auth, async (req,res)=>{
     }
 })
 
+//GET request for tasks and filter based on completed parameter
 router.get('/tasks', auth, async(req,res)=>{
     try{
         const match = {}
+        const options = {}
         if(req.query.completed){
             match.completed = req.query.completed.toLowerCase() === 'true'
         }
+        if(req.query.limit)
+        {
+            options.limit = parseInt(req.query.limit)
+        }
+        if(req.query.skip)
+        {
+            options.skip = parseInt(req.query.skip)
+        }
         await req.user.populate({
             path: 'tasks',
-            match: match
+            match,
+            options
         })
         res.send(req.user.tasks)
     }catch(error){
