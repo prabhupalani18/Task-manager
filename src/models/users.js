@@ -2,7 +2,6 @@ const mongoose = require("mongoose")
 const validator = require("validator")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-require('dotenv').config()
 const expiresIn = process.env.TOKEN_EXPIRATION_DURATION
 const secretKey = process.env.SECRETKEY
 const Tasks = require("../models/tasks")
@@ -71,6 +70,7 @@ userSchema.methods.toJSON = function(){
     const userProfile = user.toObject()
     delete userProfile.password
     delete userProfile.tokens
+    delete userProfile.avatar
     return userProfile
 }
 
