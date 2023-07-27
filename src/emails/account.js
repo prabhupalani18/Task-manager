@@ -3,7 +3,7 @@ const sgMailApiKey = process.env.SENDGRID_API_KEY
 
 sgMail.setApiKey(sgMailApiKey)
 
-const sendWelcomeEmail = (email, name)=>{
+const sendWelcomeEmail = async(email, name)=>{
     sgMail.send({
         to: email,
         from: 'sriprabhu642.sp@gmail.com',
@@ -12,7 +12,7 @@ const sendWelcomeEmail = (email, name)=>{
     })
 }
 
-const sendCancellationEmail = (email, name)=>{
+const sendCancellationEmail = async(email, name)=>{
     sgMail.send({
         to: email,
         from: 'sriprabhu642.sp@gmail.com',

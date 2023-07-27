@@ -25,7 +25,7 @@ router.post('/users', async(req,res)=>{
     try{
         const user = new User(req.body)
         await user.save()
-        sendWelcomeEmail(user.email, user.name)
+        await sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken()
         res.status(201).send({user, token})
     }catch(error)
@@ -113,7 +113,7 @@ router.patch('/users/me', auth, async(req,res)=>{
 router.delete('/users/me', auth, async(req,res)=>{
     try{
         await User.deleteOne(req.user._id)
-        sendCancellationEmail(req.user.email, req.user.name)
+        await sendCancellationEmail(req.user.email, req.user.name)
         res.send(req.user)
     }catch(error){
         res.status(500).json({ error: error.message })
