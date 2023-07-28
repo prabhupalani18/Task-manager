@@ -5,7 +5,7 @@ sgMail.setApiKey(sgMailApiKey)
 
 const sendWelcomeEmail = async(email, name)=>{
     try{
-        sgMail.send({
+        await sgMail.send({
             to: email,
             from: 'sriprabhu642.sp@gmail.com',
             subject: 'Thanks for joingin in!',
@@ -19,7 +19,7 @@ const sendWelcomeEmail = async(email, name)=>{
 
 const sendCancellationEmail = async(email, name)=>{
     try{
-        sgMail.send({
+        await sgMail.send({
             to: email,
             from: 'sriprabhu642.sp@gmail.com',
             subject: 'Sorry to see you go!',
